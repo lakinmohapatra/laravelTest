@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "49c61e371522e6e562bd5d2fad1030b5",
-    "content-hash": "21afde7254c97099ee0f6a887c2e6899",
+    "hash": "e242afcd3f0c743f87563e73447c7ea2",
+    "content-hash": "c84492d9ba53f0172c7d0ae66dddd618",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -308,16 +308,16 @@
         },
         {
             "name": "lakinmohapatra/filemaker_laravel",
-            "version": "v0.0.3",
+            "version": "v0.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lakinmohapatra/filemaker_laravel.git",
-                "reference": "1b7943e6922d3bc76281900c16ea0576a2bb8a49"
+                "reference": "e59ac4176e668e2624033c449ef4e6f03fc6075c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lakinmohapatra/filemaker_laravel/zipball/1b7943e6922d3bc76281900c16ea0576a2bb8a49",
-                "reference": "1b7943e6922d3bc76281900c16ea0576a2bb8a49",
+                "url": "https://api.github.com/repos/lakinmohapatra/filemaker_laravel/zipball/e59ac4176e668e2624033c449ef4e6f03fc6075c",
+                "reference": "e59ac4176e668e2624033c449ef4e6f03fc6075c",
                 "shasum": ""
             },
             "require": {
@@ -326,6 +326,11 @@
                 "php": ">=5.3.0"
             },
             "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "": "src/"
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
@@ -346,7 +351,7 @@
             ],
             "description": "ORM for interaction with filemaker database",
             "homepage": "https://github.com/lakinmohapatra/filemaker_laravel",
-            "time": "2016-02-10 05:51:55"
+            "time": "2016-02-10 06:51:32"
         },
         {
             "name": "laravel/framework",
