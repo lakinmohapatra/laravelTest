@@ -10,5 +10,7 @@ class Test extends Model
     public function fm()
     {
         return Test::test();
+        //return Test::testQuery();
+        //return Test::testElo();
     }
 }
