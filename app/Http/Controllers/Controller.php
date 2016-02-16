@@ -14,6 +14,6 @@ class Controller extends BaseController
     public function test()
     {
         $test = new Test();
-        echo $test->fm();
+        $test->fm();
     }
 }
