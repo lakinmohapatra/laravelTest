@@ -13,6 +13,10 @@ class Test extends Model
     {
         //return Test::test();
         //return Test::testQuery();
-        return Test::testElo();
+        //return Test::testElo();
+        
+        $test = new Test();
+        $test->name = 'dsfds';
+        $test->save();
     }
 }

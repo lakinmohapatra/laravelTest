@@ -24,11 +24,6 @@ abstract class Model extends BaseModel
         return $this->getLayoutName();
     }
     
-    public function test()
-    {
-        echo 'hi';
-    }
-
     public function getLayoutName()
     {
         return $this->layoutName;
@@ -62,5 +57,14 @@ abstract class Model extends BaseModel
     public function newEloquentBuilder($query)
     {
         return new Builder($query);
+    }
+    
+    public function save(array $options = [])
+    {
+        $attributes = $this->attributes;
+        
+        echo '<pre>';
+        print_r($this->attributes);
+        echo $this->getLayoutName();
     }
 }
