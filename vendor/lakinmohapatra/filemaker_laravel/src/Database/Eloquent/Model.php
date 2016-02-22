@@ -19,6 +19,19 @@ use laravel_filemaker\Database\Query\Builder as QueryBuilder;
 
 abstract class Model extends BaseModel
 {
+    /**
+     * Create a new Eloquent model instance.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        //set_error_handler(null);
+        //set_exception_handler(null);
+    }
+    
     public function getTable()
     {
         return $this->getLayoutName();
@@ -62,9 +75,11 @@ abstract class Model extends BaseModel
     public function save(array $options = [])
     {
         $attributes = $this->attributes;
+       
+         if ($this->exists) {
+            return $this->performFMUpdate($attributes);
+        }
         
-        echo '<pre>';
-        print_r($this->attributes);
-        echo $this->getLayoutName();
+        return $this->insert($attributes);
     }
 }

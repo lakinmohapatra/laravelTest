@@ -7,7 +7,7 @@ use filemaker_laravel\Database\Eloquent\Model;
 
 class Test extends Model
 {
-    protected $layoutName = 'Web_GCT';
+    protected $layoutName = 'Test';
     
     public function fm()
     {
