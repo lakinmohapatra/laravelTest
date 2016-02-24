@@ -15,7 +15,10 @@ class Test extends Model
         //return Test::testQuery();
         //return Test::testElo();
         
-        $test = new Test();
+        $test = Test::where('name', '==', '*')->get('name');
+        echo '<pre>';
+        print_r($test);
+        exit;
         $test->name = 'dsfds';
         $test->save();
     }

@@ -77,9 +77,10 @@ abstract class Model extends BaseModel
         $attributes = $this->attributes;
        
          if ($this->exists) {
-            return $this->performFMUpdate($attributes);
+            return $this->update($attributes);
         }
         
         return $this->insert($attributes);
     }
+    
 }

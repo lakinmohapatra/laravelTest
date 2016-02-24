@@ -7,6 +7,20 @@ use FileMaker;
 class Builder extends BaseBuilder
 {
    protected $fmConnection;
+   
+   /**
+     * All of the available clause operators.
+     *
+     * @var array
+     */
+    protected $operators = [
+        '=', '<', '>', '<=', '>=', '<>', '!=',
+        'like', 'like binary', 'not like', 'between', 'ilike',
+        '&', '|', '^', '<<', '>>',
+        'rlike', 'regexp', 'not regexp',
+        '~', '~*', '!~', '!~*', 'similar to',
+        'not similar to', '=='
+    ];
     
    /**
    * Create a new query builder instance.
@@ -41,7 +55,7 @@ class Builder extends BaseBuilder
       if (empty($values)) {
         return false;
       }
-     print_r($values);
+      
       $insertCommand = $this->fmConnection->newAddCommand($this->from);
       
       foreach ($values as $attributeName => $attributeValue) {
@@ -51,11 +65,38 @@ class Builder extends BaseBuilder
       $results = $insertCommand->execute();
       
       if (FileMaker::isError($results)) {
-         echo $results->getMessage();
          return false;
       }
-      echo '<pre>';
-      print_r($results);
       
+      return $results->getRecords();
    }
+   
+   public function update(array $values)
+   {
+       if (empty($values)) {
+        return false;
+      }
+       
+   }
+   
+   /**
+     * Execute the query as a "select" statement.
+     *
+     * @param  array  $columns
+     * @return array|static[]
+     */
+    public function get($columns = ['*'])
+    {
+        $original = $this->columns;
+      
+        if (is_null($original)) {
+            $this->columns = $columns;
+        }
+
+        $results = $this->processor->processSelect($this, $this->runSelect());
+
+        $this->columns = $original;
+
+        return $results;
+    }
 }
