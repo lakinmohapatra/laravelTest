@@ -28,8 +28,8 @@ abstract class Model extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        //set_error_handler(null);
-        //set_exception_handler(null);
+        set_error_handler(null);
+        set_exception_handler(null);
     }
     
     public function getTable()

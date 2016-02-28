@@ -7,7 +7,7 @@ use filemaker_laravel\Database\Eloquent\Model;
 
 class Test extends Model
 {
-    protected $layoutName = 'Test';
+    protected $layoutName = 'Web_GCT';
     
     public function fm()
     {
@@ -15,7 +15,8 @@ class Test extends Model
         //return Test::testQuery();
         //return Test::testElo();
         
-        $test = Test::where('name', '==', '*')->get('name');
+        $test = Test::where('EmailFlag', '==', '1')
+                     ->get( array('GiftCardNumber', 'EmailFlag'));
         echo '<pre>';
         print_r($test);
         exit;
