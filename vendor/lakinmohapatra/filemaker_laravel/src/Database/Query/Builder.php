@@ -108,7 +108,7 @@ class Builder extends BaseBuilder
         if (empty($columns) || empty($results)) {
             return false;
         }
-
+        
         $records = $results->getRecords();
         $this->fmFields = $results->getFields();
         
@@ -125,6 +125,10 @@ class Builder extends BaseBuilder
             return false;
         }
         
+        if (in_array('*', $columns)) {
+            $columns = $this->fmFields;
+        }
+        
         if (is_array($columns)) {
             foreach ($columns as $column) {
                 $eloquentRecord[$column] = $this->getIndivisualFieldValues($fmRecord, $column);
@@ -132,6 +136,7 @@ class Builder extends BaseBuilder
         } elseif (is_string($columns)) {
             $eloquentRecord[$columns] = $this->getIndivisualFieldValues($fmRecord, $columns);
         }
+        
         return $eloquentRecord;
     }
     

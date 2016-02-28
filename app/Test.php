@@ -15,8 +15,11 @@ class Test extends Model
         //return Test::testQuery();
         //return Test::testElo();
         
-        $test = Test::where('EmailFlag', '==', '1')
-                     ->get( array('GiftCardNumber', 'EmailFlag'));
+        $test = $this->where('EmailFlag', '==', '1')
+                     ->get();
+        foreach ($test as $t) {
+           echo  $t['GiftCardNumber'];
+        }
         echo '<pre>';
         print_r($test);
         exit;
