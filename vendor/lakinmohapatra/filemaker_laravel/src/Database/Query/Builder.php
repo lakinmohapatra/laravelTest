@@ -17,6 +17,8 @@ class Builder extends BaseBuilder
     protected $operators = [
         '=', '<', '>', '<=', '>=', '<>', '!=', '=='
     ];
+    
+    protected $fmFields;
 
    /**
    * Create a new query builder instance.
@@ -108,31 +110,35 @@ class Builder extends BaseBuilder
         }
 
         $records = $results->getRecords();
-
-        $eloquentRecords = array();
-
-        if (is_array($columns)) {
-            foreach ($columns as $column) {
-                $eloquentRecords[$column] = $this->getFMFieldValues($records, $column);
-            }
-        } elseif (is_string($columns)) {
-            $eloquentRecords[$columns] = $this->getFMFieldValues($records, $columns);
+        $this->fmFields = $results->getFields();
+        
+        foreach ($records as $record) {
+            $eloquentRecords[] = $this->getFMFieldValues($record, $columns);
         }
-
+        
         return $eloquentRecords;
     }
 
-    protected function getFMFieldValues($fmRecords = array(), $column = '')
+    protected function getFMFieldValues($fmRecord = array(), $columns = '')
     {
-        if (empty($fmRecords) || empty($column)) {
+        if (empty($fmRecord) || empty($columns)) {
             return false;
         }
-
-        foreach ($fmRecords as $record) {
-            $eloquentRecords[] = $record->getField($column);
+        
+        if (is_array($columns)) {
+            foreach ($columns as $column) {
+                $eloquentRecord[$column] = $this->getIndivisualFieldValues($fmRecord, $column);
+            }
+        } elseif (is_string($columns)) {
+            $eloquentRecord[$columns] = $this->getIndivisualFieldValues($fmRecord, $columns);
         }
-
-        return $eloquentRecords;
+        return $eloquentRecord;
+    }
+    
+    protected function getIndivisualFieldValues($fmRecord, $column) {
+        return in_array($column, $this->fmFields)
+               ? $fmRecord->getField($column)
+               : '';
     }
 
     protected function addBasicFindCriterion($wheres = array(), $findCommand = array())
