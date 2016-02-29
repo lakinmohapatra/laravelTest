@@ -15,7 +15,8 @@ class Test extends Model
         //return Test::testQuery();
         //return Test::testElo();
         
-        $test = $this->where('EmailFlag', '==', '1')
+        $test = $this->where('EmailFlag', '==', '1', 'or')
+                     ->where('GiftCardNumber', '==', '*')
                      ->get();
         foreach ($test as $t) {
            echo  $t['GiftCardNumber'];
