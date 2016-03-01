@@ -95,6 +95,7 @@ class Builder extends BaseBuilder
         }
         
         $this->addOrders($command);
+        $this->setRange($command);
         
         $results = $command->execute();
         
@@ -212,6 +213,27 @@ class Builder extends BaseBuilder
             $command->addSortRule($order['column'], $i, $direction);
             $i++;
         }
+    }
+    
+    public function skip($offset)
+    {
+        $this->offset = $offset;
+
+        return $this;
+    }
+
+    public function limit($limit)
+    {
+        $this->limit = $limit;
+
+        return $this;
+    }
+    
+    public function setRange($command)
+    {
+        $command->setRange($this->offset, $this->limit);
+
+        return $this;
     }
 
    /**

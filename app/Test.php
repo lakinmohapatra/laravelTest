@@ -17,6 +17,8 @@ class Test extends Model
         $test = $this->where('EmailFlag', '==', '1', 'or')
                      ->where('GiftCardNumber', '==', '*')
                      ->orderBy('GiftCard_AmountLeft', 'asc')
+                     ->skip(10)
+                     ->take(5)
                      ->get();
         foreach ($test as $t) {
            echo  $t['GiftCardNumber'];
