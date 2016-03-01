@@ -88,12 +88,15 @@ class Builder extends BaseBuilder
     {
         $records = array();
         if ($this->isOrCondition($this->wheres)) {
-            $results = $this->compoundFind($columns);
+            $command = $this->compoundFind($columns);            
         } else {
-            $findCommand = $this->fmConnection->newFindCommand($this->from);
-            $this->addBasicFindCriterion($this->wheres, $findCommand);
-            $results = $findCommand->execute();
+            $command = $this->fmConnection->newFindCommand($this->from);
+            $this->addBasicFindCriterion($this->wheres, $command);
         }
+        
+        $this->addOrders($command);
+        
+        $results = $command->execute();
         
         if (FileMaker::isError($results)) {
             echo $results->getMessage();
@@ -177,7 +180,7 @@ class Builder extends BaseBuilder
             }
         }
         
-        $this->newFindRequest($orColumns, $andColumns);
+        return $this->newFindRequest($orColumns, $andColumns);
     }
     
     protected function newFindRequest($orColumns, $andColumns)
@@ -198,7 +201,17 @@ class Builder extends BaseBuilder
             $i++;
         }
         
-        return $compoundFind->execute();
+        return $compoundFind;
+    }
+    
+    private function addOrders($command)
+    {
+        $i = 1;
+        foreach($this->orders as $order) {
+            $direction = $order['direction'] == 'desc' ? FILEMAKER_SORT_DESCEND : FILEMAKER_SORT_ASCEND;
+            $command->addSortRule($order['column'], $i, $direction);
+            $i++;
+        }
     }
 
    /**
