@@ -4,6 +4,7 @@ namespace App;
 
 //use Illuminate\Database\Eloquent\Model;
 use filemaker_laravel\Database\Eloquent\Model;
+use DB;
 
 class Test extends Model
 {
@@ -14,19 +15,22 @@ class Test extends Model
         //return Test::test();
         //return Test::testQuery();
         //return Test::testElo();
-        $test = $this->where('_kf_ContractSerNum', '==', '1', 'or')
-                     ->where('_kf_ContractSerNum', '==', '*')
+        $test = $this->where('_kp_ContractID', '==', '11111')
                      ->orderBy('ContractName', 'asc')
-                     ->skip(10)
-                     ->take(5)
-                     ->get();
-        foreach ($test as $t) {
-           echo  $t['GiftCardNumber'];
-        }
+                     ->first();
+                     
+        
+        //foreach ($test as $t) {
+        //   echo  $t['GiftCardNumber'];
+        //}
+        $test->ContractName = 'Test123';
+        $test->save();
+        
+        //$test = self::where('_kp_ContractID', 11111)
+        //    ->update(['ContractName' => 'Test']);
+            
         echo '<pre>';
         print_r($test);
         exit;
-        $test->name = 'dsfds';
-        $test->save();
     }
 }

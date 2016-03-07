@@ -77,7 +77,8 @@ abstract class Model extends BaseModel
         $attributes = $this->attributes;
        
          if ($this->exists) {
-            return $this->update($attributes);
+            $query = $this->newBaseQueryBuilder();
+            return $query->update($attributes);
         }
         
         return $this->insert($attributes);

@@ -70,11 +70,39 @@ class Builder extends BaseBuilder
         return $results->getRecords();
     }
 
-    public function update(array $values)
+    public function update(array $columns)
     {
-        if (empty($values)) {
-            return false;
+        $result = $this->getResults($columns);
+        $msg = 'false';
+
+        if(!FileMaker::isError($result) && $result->getFetchCount() > 0) {
+            $records = $result->getRecords();
+            foreach($records as $record) {
+                $recordId = $record->getRecordId();
+                
+                $command = $this->fmConnection->newEditCommand($this->from, $recordId);
+                if(FileMaker::isError($command)){
+                    return $msg;
+                }
+
+                foreach($columns as $key => $value) {
+                    if ($key != 'updated_at') {
+                        $command->setField($key, $value);
+                    }
+                }
+                $result = $command->execute();
+                if (!FileMaker::isError($result)){
+                    $msg = 'true';
+                }
+                else {
+                    $msg = $result->getMessage();
+                }
+            }                
         }
+        else {
+            $msg = $result->getMessage();
+        }
+        return $msg;
 
     }
 
@@ -86,25 +114,26 @@ class Builder extends BaseBuilder
      */
     public function get($columns = ['*'])
     {
-        $records = array();
-        if ($this->isOrCondition($this->wheres)) {
-            $command = $this->compoundFind($columns);            
-        } else {
-            $command = $this->fmConnection->newFindCommand($this->from);
-            $this->addBasicFindCriterion($this->wheres, $command);
-        }
-        
-        $this->addOrders($command);
-        $this->setRange($command);
-        
-        $results = $command->execute();
-        
+        $results = $this->getResults($columns);
         if (FileMaker::isError($results)) {
             echo $results->getMessage();
                 return false;
         }
 
         return $this->getFMResult($columns, $results);
+    }
+    
+    protected function getResults($columns) {
+        if ($this->isOrCondition($this->wheres)) {
+            $command = $this->compoundFind($columns);            
+        } else {
+            $command = $this->basicFind();
+        }
+        
+        $this->addOrders($command);
+        $this->setRange($command);
+        
+        return $command->execute();
     }
 
     protected function getFMResult($columns, $results = array())
@@ -119,10 +148,6 @@ class Builder extends BaseBuilder
         foreach ($records as $record) {
             $eloquentRecords[] = $this->getFMFieldValues($record, $columns);
         }
-        
-        echo '<pre>';
-        print_r($eloquentRecords);
-        exit;
         return $eloquentRecords;
     }
 
@@ -182,6 +207,13 @@ class Builder extends BaseBuilder
         }
         
         return $this->newFindRequest($orColumns, $andColumns);
+    }
+    
+    protected function basicFind() {
+        $command = $this->fmConnection->newFindCommand($this->from);
+        $this->addBasicFindCriterion($this->wheres, $command);
+        
+        return $command;
     }
     
     protected function newFindRequest($orColumns, $andColumns)
