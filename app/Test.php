@@ -16,7 +16,7 @@ class Test extends Model
         //return Test::test();
         //return Test::testQuery();
         //return Test::testElo();
-        $test = $this->where('_kp_ContractID', '==', '75A0343CC')
+        $test = $this->where('_kp_ContractID', '==', '*')
                      ->orderBy('ContractName', 'asc')
                      ->first();
                      

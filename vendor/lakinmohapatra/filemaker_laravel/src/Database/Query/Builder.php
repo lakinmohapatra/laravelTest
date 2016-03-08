@@ -72,7 +72,7 @@ class Builder extends BaseBuilder
 
     public function update(array $columns)
     {
-        $result = $this->getResults($columns);
+        $result = $this->getBasicFindResults($columns);
         $msg = 'false';
 
         if(!FileMaker::isError($result) && $result->getFetchCount() > 0) {
@@ -114,7 +114,7 @@ class Builder extends BaseBuilder
      */
     public function get($columns = ['*'])
     {
-        $results = $this->getResults($columns);
+        $results = $this->getBasicFindResults($columns);
         if (FileMaker::isError($results)) {
             echo $results->getMessage();
                 return false;
@@ -123,7 +123,7 @@ class Builder extends BaseBuilder
         return $this->getFMResult($columns, $results);
     }
     
-    protected function getResults($columns) {
+    protected function getBasicFindResults($columns) {
         if ($this->isOrCondition($this->wheres)) {
             $command = $this->compoundFind($columns);            
         } else {
@@ -291,6 +291,9 @@ class Builder extends BaseBuilder
         $this->addBasicFindCriterion($this->wheres, $command);
         
         $result = $command->execute();
+        echo '<pre>';
+        print_r($result);
+        exit;
         
         if(!FileMaker::isError($result) && $result->getFetchCount() > 0) {
             $records = $result->getRecords();
