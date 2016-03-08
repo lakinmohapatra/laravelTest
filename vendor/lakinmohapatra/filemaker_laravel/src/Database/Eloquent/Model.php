@@ -78,6 +78,7 @@ abstract class Model extends BaseModel
        
         if ($this->exists) {
             $query = $this->newBaseQueryBuilder();
+            $query->from = $this->getLayoutName();
             return $query->update($attributes);
         }
         
@@ -95,8 +96,11 @@ abstract class Model extends BaseModel
             $attr = array(
                 'column' => $this->getKeyName(),
                 'value' => $attributes[$this->getKeyName()],
-                'operator' => 'and'
+                'operator' => '==',
+                'boolean' => 'and',
+                'type' => 'Basic'
             );
+            $query->from = $this->getLayoutName();
             $query->delete([$attr]);
         }
     }

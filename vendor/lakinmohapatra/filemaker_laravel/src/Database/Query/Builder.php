@@ -283,8 +283,7 @@ class Builder extends BaseBuilder
     }
     
     public function delete($attribute = null) {
-        echo '<pre>';
-        print_r($attribute);echo $this->from;
+        
         if(!is_null($attribute)) {
             $this->wheres = $attribute;
         }
