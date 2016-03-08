@@ -281,4 +281,28 @@ class Builder extends BaseBuilder
         return in_array('or', array_pluck($wheres, 'boolean'));
 
     }
+    
+    public function delete($attribute = null) {
+        echo '<pre>';
+        print_r($attribute);echo $this->from;
+        if(!is_null($attribute)) {
+            $this->wheres = $attribute;
+        }
+        $command = $this->fmConnection->newFindCommand($this->from);
+        $this->addBasicFindCriterion($this->wheres, $command);
+        
+        $result = $command->execute();
+        
+        if(!FileMaker::isError($result) && $result->getFetchCount() > 0) {
+            $records = $result->getRecords();
+            foreach($records as $record) {echo 1;
+                $record->delete();
+            }
+        }
+        else {
+            $msg = $result->getMessage();
+            echo $msg;
+        }
+        return $msg;
+    }
 }

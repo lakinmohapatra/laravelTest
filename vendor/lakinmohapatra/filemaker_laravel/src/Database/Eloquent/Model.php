@@ -76,7 +76,7 @@ abstract class Model extends BaseModel
     {
         $attributes = $this->attributes;
        
-         if ($this->exists) {
+        if ($this->exists) {
             $query = $this->newBaseQueryBuilder();
             return $query->update($attributes);
         }
@@ -84,4 +84,20 @@ abstract class Model extends BaseModel
         return $this->insert($attributes);
     }
     
+    public function delete()
+    {
+        if (is_null($this->getKeyName())) {
+            throw new Exception('No primary key defined on model.');
+        }
+        if ($this->exists) {
+            $attributes = $this->attributes;
+            $query = $this->newBaseQueryBuilder();
+            $attr = array(
+                'column' => $this->getKeyName(),
+                'value' => $attributes[$this->getKeyName()],
+                'operator' => 'and'
+            );
+            $query->delete([$attr]);
+        }
+    }
 }
