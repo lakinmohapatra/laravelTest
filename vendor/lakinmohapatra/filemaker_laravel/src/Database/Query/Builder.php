@@ -294,7 +294,7 @@ class Builder extends BaseBuilder
         
         if(!FileMaker::isError($result) && $result->getFetchCount() > 0) {
             $records = $result->getRecords();
-            foreach($records as $record) {echo 1;
+            foreach($records as $record) {
                 $record->delete();
             }
         }
