@@ -291,9 +291,6 @@ class Builder extends BaseBuilder
         $this->addBasicFindCriterion($this->wheres, $command);
         
         $result = $command->execute();
-        echo '<pre>';
-        print_r($result);
-        exit;
         
         if(!FileMaker::isError($result) && $result->getFetchCount() > 0) {
             $records = $result->getRecords();
