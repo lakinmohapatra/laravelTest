@@ -31,12 +31,12 @@ abstract class Model extends BaseModel
         set_error_handler(null);
         set_exception_handler(null);
     }
-    
+
     public function getTable()
     {
         return $this->getLayoutName();
     }
-    
+
     public function getLayoutName()
     {
         return $this->layoutName;
@@ -46,7 +46,7 @@ abstract class Model extends BaseModel
     {
         $this->layoutName = $layout;
     }
-    
+
     /**
      * Get a new query builder instance for the connection.
      *
@@ -60,7 +60,7 @@ abstract class Model extends BaseModel
 
         return new QueryBuilder($conn, $grammar, $conn->getPostProcessor());
     }
-    
+
     /**
      * Create a new Eloquent query builder for the model.
      *
@@ -71,37 +71,16 @@ abstract class Model extends BaseModel
     {
         return new Builder($query);
     }
-    
+
     public function save(array $options = [])
     {
         $attributes = $this->attributes;
-       
-        if ($this->exists) {
-            $query = $this->newBaseQueryBuilder();
-            $query->from = $this->getLayoutName();
-            return $query->update($attributes);
+
+         if ($this->exists) {
+            return $this->update($attributes);
         }
-        
+
         return $this->insert($attributes);
     }
-    
-    public function delete()
-    {
-        if (is_null($this->getKeyName())) {
-            throw new Exception('No primary key defined on model.');
-        }
-        if ($this->exists) {
-            $attributes = $this->attributes;
-            $query = $this->newBaseQueryBuilder();
-            $attr = array(
-                'column' => $this->getKeyName(),
-                'value' => $attributes[$this->getKeyName()],
-                'operator' => '==',
-                'boolean' => 'and',
-                'type' => 'Basic'
-            );
-            $query->from = $this->getLayoutName();
-            $query->delete([$attr]);
-        }
-    }
+
 }
