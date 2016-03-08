@@ -16,4 +16,10 @@ class Controller extends BaseController
         $test = new Test();
         $test->fm();
     }
+    
+    public function get()
+    {
+        $test = new Test();
+        $test->get();
+    }
 }

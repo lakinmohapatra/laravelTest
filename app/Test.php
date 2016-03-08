@@ -16,16 +16,17 @@ class Test extends Model
         //return Test::test();
         //return Test::testQuery();
         //return Test::testElo();
-        $test = $this->where('_kp_ContractID', '==', '*')
+        $test = $this->where('_kp_ContractID', '==', 'S06834267-Closed Contract')
                      ->orderBy('ContractName', 'asc')
                      ->first();
                      
-        $test->delete();
+        //$test->delete();
         //foreach ($test as $t) {
         //   echo  $t['GiftCardNumber'];
         //}
-        //$test->ContractName = 'Test123';
-        //$test->save();
+        $test->Country = 'TestCountry';
+        $test->ContractName = 'TestContract';
+        $message = $test->save();
         
         //$test = self::where('_kf_AgencyName', 'IDOT')
         //    ->update(['ContractName' => 'Hello']);
@@ -33,6 +34,14 @@ class Test extends Model
         //self::where('_kp_ContractID', '75A0420 Bag to Bike')
         //    ->delete();
             
+        echo $message;
+    }
+    
+    public function get() {
+        $test = $this->where('_kp_ContractID', '==', 'S06834267-Closed Contract')
+                     ->orderBy('ContractName', 'asc')
+                     ->first();
+                     
         echo '<pre>';
         print_r($test);
         exit;

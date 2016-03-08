@@ -32,3 +32,4 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 Route::get('/test', array('as' => 'test', 'uses' => 'Controller@test'));
+Route::get('/get', array('as' => 'test', 'uses' => 'Controller@get'));
