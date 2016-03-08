@@ -19,7 +19,7 @@ class Builder extends BaseBuilder
     ];
 
     protected $fmFields;
-    protected $fmResult = 'fmresult';
+    protected $fmResult;
 
    /**
    * Create a new query builder instance.
