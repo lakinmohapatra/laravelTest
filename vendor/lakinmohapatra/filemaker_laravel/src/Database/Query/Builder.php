@@ -248,9 +248,11 @@ class Builder extends BaseBuilder
         }
 
         foreach ($wheres as $where) {
+            $operator = $where['operator'] === '=' ? '==' : $where['operator'];
+
             $findCommand->addFindCriterion(
                 $where['column'],
-                $where['operator'] . $where['value']
+                $operator . $where['value']
             );
         }
     }
@@ -268,14 +270,13 @@ class Builder extends BaseBuilder
                 $andColumns[] = $where;
             }
         }
-
+        
         return $this->newFindRequest($orColumns, $andColumns);
     }
 
     protected function newFindRequest($orColumns, $andColumns)
     {
         $findRequests = array();
-
         foreach ($orColumns as $orColumn) {
             $findRequest =  $this->fmConnection->newFindRequest($this->from);
             $this->addBasicFindCriterion([$orColumn], $findRequest);
@@ -304,6 +305,5 @@ class Builder extends BaseBuilder
         }
 
         return in_array('or', array_pluck($wheres, 'boolean'));
-
     }
 }

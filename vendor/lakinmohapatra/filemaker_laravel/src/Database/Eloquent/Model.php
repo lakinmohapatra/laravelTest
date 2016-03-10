@@ -48,6 +48,16 @@ abstract class Model extends BaseModel
     }
 
     /**
+     * Get the table qualified key name.
+     *
+     * @return string
+     */
+    public function getQualifiedKeyName()
+    {
+        return $this->getKeyName();
+    }
+
+    /**
      * Get a new query builder instance for the connection.
      *
      * @return \Illuminate\Database\Query\Builder
