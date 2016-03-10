@@ -138,8 +138,8 @@ class Builder extends BaseBuilder
         $results = $this->getFindResults();
 
         if (FileMaker::isError($results)) {
-            echo $results->getMessage();
-                return false;
+            //echo $results->getMessage();
+                return array();
         }
 
         $this->fmResult = $this->getFMResult($columns, $results);
@@ -270,7 +270,7 @@ class Builder extends BaseBuilder
                 $andColumns[] = $where;
             }
         }
-        
+
         return $this->newFindRequest($orColumns, $andColumns);
     }
 
