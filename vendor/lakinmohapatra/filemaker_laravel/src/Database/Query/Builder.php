@@ -154,7 +154,7 @@ class Builder extends BaseBuilder
             $command = $this->basicFind();
         }
 
-        $this->orderBy($command);
+        $this->fmOrderBy($command);
         $this->setRange($command);
 
         return $command->execute();
@@ -167,7 +167,7 @@ class Builder extends BaseBuilder
         return $command;
     }
 
-    public function orderBy($command)
+    public function fmOrderBy($command)
     {
         $i = 1;
         foreach($this->orders as $order) {
