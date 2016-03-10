@@ -82,6 +82,12 @@ abstract class Model extends BaseModel
         return new Builder($query);
     }
 
+    /**
+     * Save the model to the database.
+     *
+     * @param  array
+     * @return Boolean/Message
+     */
     public function save(array $options = [])
     {
         $attributes = $this->attributes;
@@ -105,6 +111,12 @@ abstract class Model extends BaseModel
         return $this->insert($attributes);
     }
 
+    /**
+     * Delete the model from the database.
+     *
+     * @param  None
+     * @return Boolean/Message
+     */
     public function delete()
     {
         if (is_null($this->getKeyName())) {
