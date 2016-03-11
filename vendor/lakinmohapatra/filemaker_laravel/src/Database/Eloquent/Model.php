@@ -185,6 +185,8 @@ abstract class Model extends BaseModel
      */
     public static function firstOrNew(array $attributes)
     {
+        // Avoid mass assignment error
+        static::unguard();
         $query = (new static)->newQueryWithoutScopes();
 
         foreach ($attributes as $attributeKey => $attributeValue) {
@@ -194,13 +196,14 @@ abstract class Model extends BaseModel
         if (! is_null($instance = $query->first())) {
             return $instance;
         }
+        return new static($attributes);
 
-        $model = new static();
+        /*$model = new static();
         foreach ($attributes as $attributeKey => $attributeValue) {
              $model->$attributeKey = $attributeValue;
         }
 
-        return $model;
+        return $model;*/
     }
 
 }
