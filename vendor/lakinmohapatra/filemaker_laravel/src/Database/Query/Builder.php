@@ -18,14 +18,14 @@ class Builder extends BaseBuilder
         '=', '<', '>', '<=', '>=', '<>', '!=', '=='
     ];
 
-    
+
     /**
      * It contains fields to be returned.
      *
      * @var array
      */
     protected $fmFields;
-    
+
     /**
      * It contains fields to be returned.
      *
@@ -47,8 +47,6 @@ class Builder extends BaseBuilder
         \Illuminate\Database\Query\Processors\Processor $processor
     ) {
         parent::__construct($connection, $grammar, $processor);
-        //set_error_handler(null);
-       //set_exception_handler(null);
         $this->fmConnection = $this->getFMConnection();
     }
 
@@ -100,16 +98,16 @@ class Builder extends BaseBuilder
     {
         $result = $this->getFindResults($columns);
         $msg = false;
-        if(!FileMaker::isError($result) && $result->getFetchCount() > 0) {
+        if (!FileMaker::isError($result) && $result->getFetchCount() > 0) {
             $records = $result->getRecords();
-            foreach($records as $record) {
+            foreach ($records as $record) {
                 $recordId = $record->getRecordId();
 
                 $command = $this->fmConnection->newEditCommand($this->from, $recordId);
-                if(FileMaker::isError($command)) {
+                if (FileMaker::isError($command)) {
                     return $msg;
                 }
-                foreach($columns as $key => $value) {
+                foreach ($columns as $key => $value) {
                     if ($key != 'updated_at') {
                         $command->setField($key, $value);
                     }
@@ -117,13 +115,11 @@ class Builder extends BaseBuilder
                 $result = $command->execute();
                 if (!FileMaker::isError($result)) {
                     $msg = true;
-                }
-                else {
+                } else {
                     $msg = $result->getMessage();
                 }
             }
-        }
-        else {
+        } else {
             $msg = $result->getMessage();
         }
         return $msg;
@@ -135,9 +131,10 @@ class Builder extends BaseBuilder
      * @param  array  $attribute
      * @return bool
      */
-    public function delete($attribute = null) {
+    public function delete($attribute = null)
+    {
 
-        if(!is_null($attribute)) {
+        if (!is_null($attribute)) {
             $this->wheres = $attribute;
         }
         $command = $this->fmConnection->newFindCommand($this->from);
@@ -145,13 +142,12 @@ class Builder extends BaseBuilder
 
         $result = $command->execute();
 
-        if(!FileMaker::isError($result) && $result->getFetchCount() > 0) {
+        if (!FileMaker::isError($result) && $result->getFetchCount() > 0) {
             $records = $result->getRecords();
-            foreach($records as $record) {
+            foreach ($records as $record) {
                 $record->delete();
             }
-        }
-        else {
+        } else {
             $msg = $result->getMessage();
             echo $msg;
         }
@@ -183,21 +179,23 @@ class Builder extends BaseBuilder
      */
     protected function getFindResults($columns)
     {
+        // Check for Fm script.
         if (property_exists($this, 'fmScript') && ! empty($this->fmScript)) {
             return $this->executeFMScript($this->fmScript);
         }
-        else {
-            if ($this->isOrCondition($this->wheres)) {
-                $command = $this->compoundFind($columns);
-            } else {
-                $command = $this->basicFind();
-            }
-            
-            $this->fmOrderBy($command);
-            $this->setRange($command);
-            
-            return $command->execute();
-        }        
+
+        // Check for or/and condition
+        if ($this->isOrCondition($this->wheres)) {
+            $command = $this->compoundFind($columns);
+        } else {
+            $command = $this->basicFind();
+        }
+
+        // OrderBy/Limit feature for filemaker
+        $this->fmOrderBy($command);
+        $this->setRange($command);
+
+        return $command->execute();
     }
 
     /**
@@ -213,7 +211,7 @@ class Builder extends BaseBuilder
 
         return $command;
     }
-    
+
     /**
      * FileMaker OR operation using newFindRequest
      *
@@ -246,7 +244,7 @@ class Builder extends BaseBuilder
     public function fmOrderBy($command)
     {
         $i = 1;
-        foreach($this->orders as $order) {
+        foreach ($this->orders as $order) {
             $direction = $order['direction'] == 'desc'
                          ? FILEMAKER_SORT_DESCEND
                          : FILEMAKER_SORT_ASCEND;
@@ -330,11 +328,11 @@ class Builder extends BaseBuilder
         if (in_array('*', $columns)) {
             $columns = $this->fmFields;
         }
-        
+
         if (is_string($columns)) {
             $columns = [$columns];
         }
-        
+
         foreach ($columns as $column) {
             $eloquentRecord[$column] = $this->getIndivisualFieldValues($fmRecord, $column);
         }
@@ -420,7 +418,7 @@ class Builder extends BaseBuilder
 
         return in_array('or', array_pluck($wheres, 'boolean'));
     }
-    
+
     /**
     * Execute FileMaker script
     *
@@ -432,9 +430,11 @@ class Builder extends BaseBuilder
         $results = array();
 
         $scriptCommand = $this->fmConnection
-                              ->newPerformScriptCommand($this->from,
-                                                        $scriptAttributes['scriptName'],
-                                                        $scriptAttributes['params']);
+                              ->newPerformScriptCommand(
+                                  $this->from,
+                                  $scriptAttributes['scriptName'],
+                                  $scriptAttributes['params']
+                              );
         return $scriptCommand->execute();
     }
 
