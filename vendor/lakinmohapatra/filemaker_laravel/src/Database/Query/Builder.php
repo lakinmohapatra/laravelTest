@@ -158,8 +158,7 @@ class Builder extends BaseBuilder
         $results = $this->getFindResults();
 
         if (FileMaker::isError($results)) {
-            //echo $results->getMessage();
-                return array();
+            return array();
         }
 
         $this->fmResult = $this->getFMResult($columns, $results);
@@ -167,24 +166,26 @@ class Builder extends BaseBuilder
         return $this->fmResult;
     }
 
-    protected function getFindResults($columns) {
+    protected function getFindResults($columns)
+    {
         if (property_exists($this, 'fmScript') && ! empty($this->fmScript)) {
             $this->executeFMScript($this->fmScript);
         }
-
-        if ($this->isOrCondition($this->wheres)) {
-            $command = $this->compoundFind($columns);
-        } else {
-            $command = $this->basicFind();
+        else {
+            if ($this->isOrCondition($this->wheres)) {
+                $command = $this->compoundFind($columns);
+            } else {
+                $command = $this->basicFind();
+            }
+            
+            $this->fmOrderBy($command);
+            $this->setRange($command);
         }
-
-        $this->fmOrderBy($command);
-        $this->setRange($command);
-
         return $command->execute();
     }
 
-    protected function basicFind() {
+    protected function basicFind()
+    {
         $command = $this->fmConnection->newFindCommand($this->from);
         $this->addBasicFindCriterion($this->wheres, $command);
 
@@ -259,7 +260,8 @@ class Builder extends BaseBuilder
         return $eloquentRecord;
     }
 
-    protected function getIndivisualFieldValues($fmRecord, $column) {
+    protected function getIndivisualFieldValues($fmRecord, $column)
+    {
         return in_array($column, $this->fmFields)
                ? $fmRecord->getField($column)
                : '';
