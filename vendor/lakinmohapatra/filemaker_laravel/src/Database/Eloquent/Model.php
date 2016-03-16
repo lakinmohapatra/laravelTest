@@ -1,4 +1,5 @@
 <?php namespace filemaker_laravel\Database\Eloquent;
+
 /*
  +--------------------------------------------------------------------
  |
@@ -17,6 +18,12 @@
 use Illuminate\Database\Eloquent\Model as BaseModel;
 use laravel_filemaker\Database\Query\Builder as QueryBuilder;
 
+/**
+* It overrides methods of default laravel models
+*
+* @see BaseModel
+*
+*/
 abstract class Model extends BaseModel
 {
     /**
@@ -114,7 +121,7 @@ abstract class Model extends BaseModel
     /**
      * Delete the model from the database.
      *
-     * @param  None
+     * @param  void
      * @return Boolean/Message
      */
     public function delete()
@@ -205,5 +212,4 @@ abstract class Model extends BaseModel
 
         return $model;*/
     }
-
 }
