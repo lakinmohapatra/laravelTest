@@ -17,12 +17,12 @@ class Builder extends EloBuilder
     }
 
     /**
-     * Find a model by its primary key.
-     *
-     * @param  array  $ids
-     * @param  array  $columns
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
+    * Find a model by its primary key.
+    *
+    * @param  array  $ids
+    * @param  array  $columns
+    * @return \Illuminate\Database\Eloquent\Collection
+    */
     public function findMany($ids, $columns = ['*'])
     {
         if (empty($ids)) {

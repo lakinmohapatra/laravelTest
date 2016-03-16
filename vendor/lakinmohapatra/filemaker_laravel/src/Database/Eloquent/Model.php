@@ -5,13 +5,10 @@
  |
  | File    : Model.php
  | Path    : ./src/Database/Eloquent/Model.php
- | Purpose : Contains all soap api connection methods for magento.
+ | Purpose : Contains required laravel model methods
  | Created : 9-Feb-2016
  | Author  : Lakin Mohapatra, Debabrata Patra
  | Company : Mindfire Solutions.
- | Comments:
- | Last Modified Date : 9-Feb-2016
- |
  +--------------------------------------------------------------------
  */
 
