@@ -16,14 +16,11 @@ class Test extends Model
         //return Test::test();
         //return Test::testQuery();
         //return Test::testElo();
-       /*$test = $this->where('_kp_ContractID', '==', 'S06834267-Closed Contract','or')
-                    ->where('_kp_ContractID', '==', 'Comet','or')
+       $test = $this->where('_kp_ContractID', '==', 'S06834267-Closed Contract')
                      ->orderBy('ContractName', 'asc')
-                     ->get();*/
-       $test = self::find();
-        echo '<pre>';
-        print_r($test);
-        exit;
+                     ->first();
+
+        dd($test);
 
         //$test->delete();
         //foreach ($test as $t) {

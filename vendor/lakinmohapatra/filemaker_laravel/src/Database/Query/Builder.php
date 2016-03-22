@@ -208,7 +208,7 @@ class Builder extends BaseBuilder
      * @param  array  $columns
      * @return bool
      */
-    protected function getFindResults($columns)
+    protected function getFindResults($columns = [])
     {
         // Check for Fm script.
         if (property_exists($this, 'fmScript') && ! empty($this->fmScript)) {
@@ -335,6 +335,8 @@ class Builder extends BaseBuilder
 
         $records = $results->getRecords();
         $this->fmFields = $results->getFields();
+        $this->relatedSets = $results->getRelatedSets();
+
 
         foreach ($records as $record) {
             $eloquentRecords[] = $this->getFMFieldValues($record, $columns);
@@ -352,8 +354,26 @@ class Builder extends BaseBuilder
      */
     protected function getFMFieldValues($fmRecord = array(), $columns = '')
     {
-        if (empty($fmRecord) || empty($columns)) {
+        if (empty($fmRecord) || empty($columns) || empty($this->relatedSets)) {
             return false;
+        }
+
+
+        foreach ($this->relatedSets as $relatedSet) {
+            $relatedSetObj = $fmRecord->getRelatedSet($relatedSet);
+            if (FileMaker::isError($relatedSetObj)) {
+                echo $relatedSetObj->getMessage();
+
+            } else {
+                $relatedSetfields = $relatedSetObj[0]->getFields();
+                $this->fmFields = array_merge($this->fmFields, $relatedSetfields);
+
+               foreach ($relatedSetObj as $relatedSetRecord) {
+                   foreach ($relatedSetfields as $relatedSetField) {echo $relatedSetField;
+                        $eloquentRecord[$relatedSetField][] = $this->getIndivisualFieldValues($relatedSetRecord, $relatedSetField);
+                   }
+               }
+            }
         }
 
         if (in_array('*', $columns)) {
