@@ -370,15 +370,15 @@ class Builder extends BaseBuilder
             $eloquentRecord[$column] = $this->getIndivisualFieldValues($fmRecord, $column, $this->fmFields);
         }
         
+        //Check if there is any portal
         foreach ($this->relatedSets as $relatedSet) {
             $relatedSetObj = $fmRecord->getRelatedSet($relatedSet);
-            if (FileMaker::isError($relatedSetObj)) {
-                echo $relatedSetObj->getMessage();
-            } else {
+            if (!FileMaker::isError($relatedSetObj)) {
                 $relatedSetfields = $relatedSetObj[0]->getFields();
                 foreach ($relatedSetfields as $relatedSetField) {
                     foreach ($relatedSetObj as $relatedSetRecord) {                   
-                        $eloquentRecord[$relatedSetField][] = $this->getIndivisualFieldValues($relatedSetRecord, $relatedSetField, $relatedSetfields);
+                        $eloquentRecord[$relatedSetField][] = $this->getIndivisualFieldValues($relatedSetRecord,
+                                            $relatedSetField, $relatedSetfields);
                     }
                 }
             }
