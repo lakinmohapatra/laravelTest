@@ -357,25 +357,7 @@ class Builder extends BaseBuilder
         if (empty($fmRecord) || empty($columns) || empty($this->relatedSets)) {
             return false;
         }
-
-
-        foreach ($this->relatedSets as $relatedSet) {
-            $relatedSetObj = $fmRecord->getRelatedSet($relatedSet);
-            if (FileMaker::isError($relatedSetObj)) {
-                echo $relatedSetObj->getMessage();
-
-            } else {
-                $relatedSetfields = $relatedSetObj[0]->getFields();
-                $this->fmFields = array_merge($this->fmFields, $relatedSetfields);
-
-               foreach ($relatedSetObj as $relatedSetRecord) {
-                   foreach ($relatedSetfields as $relatedSetField) {echo $relatedSetField;
-                        $eloquentRecord[$relatedSetField][] = $this->getIndivisualFieldValues($relatedSetRecord, $relatedSetField);
-                   }
-               }
-            }
-        }
-
+        
         if (in_array('*', $columns)) {
             $columns = $this->fmFields;
         }
@@ -385,7 +367,21 @@ class Builder extends BaseBuilder
         }
 
         foreach ($columns as $column) {
-            $eloquentRecord[$column] = $this->getIndivisualFieldValues($fmRecord, $column);
+            $eloquentRecord[$column] = $this->getIndivisualFieldValues($fmRecord, $column, $this->fmFields);
+        }
+        
+        foreach ($this->relatedSets as $relatedSet) {
+            $relatedSetObj = $fmRecord->getRelatedSet($relatedSet);
+            if (FileMaker::isError($relatedSetObj)) {
+                echo $relatedSetObj->getMessage();
+            } else {
+                $relatedSetfields = $relatedSetObj[0]->getFields();
+                foreach ($relatedSetfields as $relatedSetField) {
+                    foreach ($relatedSetObj as $relatedSetRecord) {                   
+                        $eloquentRecord[$relatedSetField][] = $this->getIndivisualFieldValues($relatedSetRecord, $relatedSetField, $relatedSetfields);
+                    }
+                }
+            }
         }
 
         return $eloquentRecord;
@@ -398,10 +394,10 @@ class Builder extends BaseBuilder
      * @param array/string $columns
      * @return integer/string value
      */
-    protected function getIndivisualFieldValues($fmRecord, $column)
+    protected function getIndivisualFieldValues($fmRecord, $field, $totalFields)
     {
-        return in_array($column, $this->fmFields)
-               ? $fmRecord->getField($column)
+        return in_array($field, $totalFields)
+               ? $fmRecord->getField($field)
                : '';
     }
 
