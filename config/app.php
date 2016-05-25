@@ -155,7 +155,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        filemaker_laravel\Database\FileMakerServiceProvider::class
+       filemaker_laravel\Database\FileMakerServiceProvider::class
     ],
 
     /*

@@ -376,30 +376,39 @@ class Builder extends BaseBuilder
 
         // Get field-value pairs
         foreach ($columns as $column) {
-            $eloquentRecord[$column] = $this->getIndivisualFieldValues($fmRecord, $column, $this->fmFields);
-        }
+            if (in_array($column, $this->fmFields)) {
+                $eloquentRecord[$column] = $this->getIndivisualFieldValues($fmRecord, $column, $this->fmFields);
+            }
 
-        //Check if there is any portal
-        foreach ($this->relatedSets as $relatedSet) {
-            // Get related set.
-            $relatedSetObj = $fmRecord->getRelatedSet($relatedSet);
+            //Check if there is any portal
+            foreach ($this->relatedSets as $relatedSet) {
+                // Get related set.
+                $relatedSetObj = $fmRecord->getRelatedSet($relatedSet);
 
-            // Check for error
-            if (!FileMaker::isError($relatedSetObj)) {
-                $relatedSetfields = $relatedSetObj[0]->getFields();
+                // Check for error
+                if (!FileMaker::isError($relatedSetObj)) {
+                    $relatedSetfields = $relatedSetObj[0]->getFields();
 
-                // Get relatedset field-value pair
-                foreach ($relatedSetfields as $relatedSetField) {
-                    foreach ($relatedSetObj as $relatedSetRecord) {
-                        $eloquentRecord[$relatedSetField][] = $this->getIndivisualFieldValues(
-                            $relatedSetRecord,
-                            $relatedSetField,
-                            $relatedSetfields
-                        );
+                    if (in_array($column, $relatedSetfields)) {
+                        $relatedSetfields[] = $column;
+                    }
+
+                    // Get relatedset field-value pair
+                    foreach ($relatedSetfields as $relatedSetField) {
+                        foreach ($relatedSetObj as $relatedSetRecord) {
+                            $eloquentRecord[$relatedSetField][] = $this->getIndivisualFieldValues(
+                                $relatedSetRecord,
+                                $relatedSetField,
+                                $relatedSetfields
+                            );
+                        }
                     }
                 }
+
             }
         }
+
+
 
         return $eloquentRecord;
     }

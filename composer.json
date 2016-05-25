@@ -7,8 +7,7 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
-		"lakinmohapatra/filemaker_laravel": "dev-master",
-        "lakinmohapatra/filemakerapi": "14.0.*"
+		"lakinmohapatra/filemaker_laravel": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -19,7 +18,8 @@
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database",
+            "vendor/lakinmohapatra/filemakerapi/FileMaker.php"
         ],
         "psr-4": {
             "App\\": "app/"

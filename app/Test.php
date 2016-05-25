@@ -16,16 +16,17 @@ class Test extends Model
         //return Test::test();
         //return Test::testQuery();
         //return Test::testElo();
-       $test = $this->where('_kp_ContractID', '==', 'S06834267-Closed Contract')
-                     ->orderBy('ContractName', 'asc')
+      $test = $this->where('_kp_ContractID', '==', 'S06834267-Closed Contract')
+                    // ->orderBy('ContractName', 'asc')
                      ->first();
 
-        dd($test);
+        //dd($test::get());
 
         //$test->delete();
         //foreach ($test as $t) {
         //   echo  $t['GiftCardNumber'];
         //}
+        dd($test);
         $test->Country = 'TestCountry';
         $test->ContractName = 'TestContract';
         $message = $test->save();
